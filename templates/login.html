@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main %}
+    <div class="main-cont">
+        <p class="header-text poppins-bold">Log in to CrownSound</p>
+        <div class="spacer"></div>
+        <form action="/login" method="post">
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Username or Email</p>
+                <input autocomplete="off" autofocus class="text-box poppins-light" name="username" placeholder="Username or Email" type="text">
+            </div>
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Password</p>
+                <input class="text-box poppins-light" name="password" placeholder="Password" type="password">
+            </div>
+            <button class="button-52" type="submit" role="button">Start the party!</button>
+        </form>
+        <p class="poppins-light reg-text">Don't have an account? <a href="/register" class="link">Sign up for CrownSound</a></p>
+    </div>
+{% endblock %}

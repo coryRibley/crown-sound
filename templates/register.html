@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="main-cont">
+        <p class="header-text poppins-bold">Register for CrownSound</p>
+        <div class="spacer"></div>
+        <form action="/register" method="post">
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Username</p>
+                <input autocomplete="off" autofocus class="text-box poppins-light" name="username" placeholder="Username" type="text">
+            </div>
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Email</p>
+                <input autocomplete="off" autofocus class="text-box poppins-light" name="email" placeholder="Email" type="text">
+            </div>
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Password</p>
+                <input class="text-box poppins-light" name="password" placeholder="Password" type="password">
+            </div>
+            <div class="mb-3">
+                <p class="input-type-text poppins-bold">Password again</p>
+                <input class="text-box poppins-light" name="password" placeholder="Password again" type="password">
+            </div>
+            <button class="button-52" type="submit" role="button">Register!</button>
+        </form>
+        <p class="poppins-light reg-text">Have an account? <a href="/login" class="link">Log in.</a></p>
+    </div>
+{% endblock %}
