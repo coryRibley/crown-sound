@@ -1,8 +1,8 @@
-from flask import render_template, redirect, render_template, session
+from flask import render_template, jsonify, redirect, render_template, session
 from functools import wraps
 
 def apology(message):
-    return render_template("apology.html", message=message)
+    return jsonify(message)
 
 def login_required(f):
     """

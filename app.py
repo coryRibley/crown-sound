@@ -1,6 +1,6 @@
 from datetime import datetime
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -28,7 +28,10 @@ def after_request(response):
 @login_required
 def index():
     if request.method == "GET":
-        return render_template("index.html")
+
+        username = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])[0]["username"]
+
+        return render_template("index.html", username=username)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -37,7 +40,7 @@ def login():
     session.clear()
 
     if request.method == "POST":
-        username = request.form.get("username").lower().strip()
+        username = request.form.get("username")
         password = request.form.get("password")
 
         if not username:
@@ -48,11 +51,11 @@ def login():
         
         if "@" in username:
             rows = db.execute(
-                "SELECT * FROM users WHERE email = ?", username
+                "SELECT * FROM users WHERE email = ?", username.lower().strip()
             )
         else:
             rows = db.execute(
-                "SELECT * FROM users WHERE username = ?", username
+                "SELECT * FROM users WHERE username = ?", username.lower().strip()
             )
 
         if len(rows) != 1 or not check_password_hash(
@@ -74,7 +77,6 @@ def logout():
 
     return redirect("/")
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -82,7 +84,8 @@ def register():
         username = request.form.get("username").lower().strip()
         email = request.form.get("email").lower().strip()
         password = request.form.getlist("password")
-        rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        username_rows = db.execute("SELECT * FROM users WHERE username = ?", username)
+        email_rows = db.execute("SELECT * FROM users WHERE email = ?", email)
 
         if not username:
             return apology("Please input a valid username.")
@@ -96,8 +99,11 @@ def register():
         if password[0] != password[1]:
             return apology("Please ensure passwords match eachother.")
         
-        if len(rows) != 0:
+        if len(username_rows) != 0:
             return apology("Username taken.")
+        
+        if len(email_rows) != 0:
+            return apology("Email is already in use.")
 
         db.execute(
             "INSERT INTO users (username, email, hash) VALUES (?, ?, ?)", 
@@ -113,6 +119,32 @@ def register():
     else:
         return render_template("register.html")
         
+@app.route("/deregister", methods=["GET", "POST"])
+@login_required
+def deregister():
+
+    if request.method == "POST":
+
+        action = request.form.get('action')
+        if action == 'return':
+            return redirect("/")
+
+        elif action == 'delete':
+            db.execute("DELETE FROM users WHERE id = ?", session["user_id"])
+            session.clear()
+            return redirect("/")
+    
+    return render_template('deregister.html')
+
+@app.route('/validate', methods=['POST'])
+def validate():
+
+    data = request.json
+    print("Received data:", data)
+
+    result = {'message': 'Action Triggered'}
+
+    return jsonify(result)
 
 if __name__ == "__main__":
     app.run(debug=True)

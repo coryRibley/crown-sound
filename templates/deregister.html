@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    De-register
+{% endblock %}
+
+{% block main %}
+    <div class="main-cont">
+        <p class="poppins-bold">Are you sure you want to permanently delete your account?</p>
+        <form action="/deregister" method="post">
+            <div class="mb-3">
+                <button class="btn btn-light" type="submit" name="action" value="return">Go Back</button>
+            </div>
+        </form>
+        <form action="/deregister" method="post">
+            <div class="mb-3">
+                <button class="btn btn-danger" type="submit" name="action" value="delete">Delete</button>
+            </div>
+        </form>
+    </div>>
+{% endblock %}

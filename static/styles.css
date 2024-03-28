@@ -30,6 +30,20 @@ body
     text-decoration: none;
 }
 
+.error-msg
+{
+    color: red;
+}
+
+.error-element
+{
+    display: none;
+    margin: 2rem;
+    background-color: crimson;
+    padding: 0.5rem;
+
+}
+
 .cont
 {
     display: flex;

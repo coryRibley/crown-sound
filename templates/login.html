@@ -8,6 +8,11 @@
     <div class="main-cont">
         <p class="header-text poppins-bold">Log in to CrownSound</p>
         <div class="spacer"></div>
+
+        <div class="error-element">
+            <p id="error_msg" class="poppins-bold">Incorrect username or password.</p>
+        </div>
+
         <form action="/login" method="post">
             <div class="mb-3">
                 <p class="input-type-text poppins-bold">Username or Email</p>
@@ -17,8 +22,40 @@
                 <p class="input-type-text poppins-bold">Password</p>
                 <input class="text-box poppins-light" name="password" placeholder="Password" type="password">
             </div>
-            <button class="button-52" type="submit" role="button">Start the party!</button>
+            <button onclick="testInput()" class="button-52" type="button" role="button">Start the party!</button>
         </form>
         <p class="poppins-light reg-text">Don't have an account? <a href="/register" class="link">Sign up for CrownSound</a></p>
     </div>
+
+    <script>
+        function testInput() {
+            let username = document.getElementsByName('username')[0].value
+            let password = document.getElementsByName('password')[0].value
+            let data = {
+                'username': username,
+                'password': password
+            }
+
+            fetch('/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                Apology(data.message)
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function Apology(message) {
+            document.getElementById('error_msg')
+            let error_msg = document.getElementById('error_element')
+            error_msg.style.display = 'block'
+        }
+    </script>
 {% endblock %}
